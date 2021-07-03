@@ -25,10 +25,11 @@
 #define SHIP_THRUST             0.06
 #define SHIP_MAX_THRUST         4.0
 #define SHIP_BREAK_SPEED        0.6
-#define BULLET_SPEED            5
-#define MAX_BULLETS             30
-#define BULLET_COOLDOWN         8
+#define BULLET_SPEED            15
+#define MAX_BULLETS             10
+#define BULLET_COOLDOWN         10
 #define BULLET_DAMAGE           10
+#define BULLET_DIE_TIMER            30
 #define GAME_WIDTH              640
 #define GAME_HEIGHT             480
 
@@ -59,6 +60,21 @@ struct Ship {
    Bullet   bullets[MAX_BULLETS];
    int      score;
 };
+
+static double
+degtorad(double deg)
+{
+   return PI * deg / 180;
+}
+
+static double
+distance(Position *lhs, Position *rhs)
+{
+   double x = rhs->x - lhs->x;
+   double y = rhs->y - lhs->y;
+   return sqrt(x*x + y*y);
+}
+
 
 struct GameState {
    void Init(int num_players);

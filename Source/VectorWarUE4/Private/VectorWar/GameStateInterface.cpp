@@ -3,25 +3,43 @@
 #include "GameStateInterface.h"
 #include "vectorwar.h"
 #include "VWGameStateBase.h"
+#include "Components/BodyComponent.h"
+#include "Components/BulletComponent.h"
+#include "Components/InputReceiverComponent.h"
+#include "Components/MovementComponent.h"
+#include "Components/ShipComponent.h"
+#include "ECS/World.h"
+
+class ShipComponent;
 
 const GameState GetGameState(const AVWGameStateBase* VWGameState)
 {
-	if (VWGameState != nullptr)
-		return VWGameState->GetGameState();
+	// if (VWGameState != nullptr)
+	// 	return VWGameState->GetGameState();
 
-	return GameState{ 0 };
+	return GameState{0};
 }
+
 const NonGameState GetNonGameState(const AVWGameStateBase* VWGameState)
 {
 	if (VWGameState != nullptr)
 		return VWGameState->GetNonGameState();
 
-	return NonGameState{ 0 };
+	return NonGameState{0};
 }
 
 int32 UGameStateInterface::ShipCount(const AVWGameStateBase* VWGameState)
 {
-	return GetGameState(VWGameState)._num_ships;
+	int amount = 0;
+	for (auto ent : World::entities)
+	{
+		auto ship = (ShipComponent*)ent->GetComponent(ShipComponentType);
+		if (ship != nullptr)
+		{
+			amount++;
+		}
+	}
+	return amount;
 }
 
 int32 UGameStateInterface::BulletCount(const AVWGameStateBase* VWGameState)
@@ -31,32 +49,95 @@ int32 UGameStateInterface::BulletCount(const AVWGameStateBase* VWGameState)
 
 FTransform UGameStateInterface::ShipTransform(const AVWGameStateBase* VWGameState, int32 Index)
 {
-	const Ship Ship = GetGameState(VWGameState)._ships[Index];
-	FVector Position = FVector((float)Ship.position.x, (float)Ship.position.y, 0);
-	FQuat Rotation = FRotator(0, Ship.heading - 90, 0).Quaternion();
-	FTransform Result = FTransform(Rotation, Position);
-	return Result;
+	for (auto ent : World::entities)
+	{
+		auto ship = (ShipComponent*)ent->GetComponent(ShipComponentType);
+		
+		if (ship != nullptr && ship->GetData()->assignedPlayer == Index)
+		{
+			auto body = (BodyComponent*)ent->GetComponent(BodyComponentType);
+			auto movement = (MovementComponent*)ent->GetComponent(MovementComponentType);
+			if (body != nullptr && movement != nullptr)
+			{
+				FVector Position = FVector((float)body->GetData()->position.x, (float)body->GetData()->position.y, 0);
+				FQuat Rotation = FRotator(0, movement->GetData()->heading - 90, 0).Quaternion();
+				FTransform Result = FTransform(Rotation, Position);
+				return Result;
+			}
+		}
+	}
+	{
+		FVector Position = FVector(0, 0, 0);
+		FQuat Rotation = FRotator(0, 0, 0).Quaternion();
+		FTransform Result = FTransform(Rotation, Position);
+		return Result;
+	}
 }
 
 int32 UGameStateInterface::ShipScore(const AVWGameStateBase* VWGameState, int32 Index)
 {
+	for (auto ent : World::entities)
+	{
+		auto ship = (ShipComponent*)ent->GetComponent(ShipComponentType);
+		
+		if (ship != nullptr && ship->GetData()->assignedPlayer == Index)
+		{
+			return ship->GetData()->score;
+		}
+	}
 	const Ship Ship = GetGameState(VWGameState)._ships[Index];
-	return Ship.score;
+	return 0;
 }
 
 bool UGameStateInterface::BulletEnabled(const AVWGameStateBase* VWGameState, int32 Index)
 {
-	const Bullet Bullet = GetBullet(VWGameState, Index);
-	return Bullet.active;
+	int counter = 0;
+	for (auto ent : World::entities)
+	{
+		auto bltComp = (BulletComponent*)ent->GetComponent(BulletComponentType);
+		if (bltComp != nullptr)
+		{
+			if (counter == Index)
+			{
+				return bltComp->GetData()->active;
+			}
+			counter++;
+		}
+	}
+	return false;
 }
 
 FTransform UGameStateInterface::BulletTransform(const AVWGameStateBase* VWGameState, int32 Index)
 {
-	const Bullet Bullet = GetBullet(VWGameState, Index);
-	FVector Position = FVector((float)Bullet.position.x, (float)Bullet.position.y, 0);
-	FQuat Rotation = FQuat::Identity;
-	FTransform Result = FTransform(Rotation, Position);
-	return Result;
+	int counter = 0;
+	for (auto ent : World::entities)
+	{
+		auto bltComp = (BulletComponent*)ent->GetComponent(BulletComponentType);
+		if (bltComp != nullptr)
+		{
+			if (counter == Index)
+			{
+				if(!bltComp->GetData()->active)
+					break;
+				auto body = (BodyComponent*)ent->GetComponent(BodyComponentType);
+				if (body != nullptr)
+				{
+					FVector Position = FVector((float)body->GetData()->position.x, (float)body->GetData()->position.y,
+					                           0);
+					FQuat Rotation = FQuat::Identity;
+					FTransform Result = FTransform(Rotation, Position);
+					return Result;
+				}
+			}
+			counter++;
+		}
+	}
+	{
+		FVector Position = FVector(0, 0, 0);
+		FQuat Rotation = FRotator(0, 0, 0).Quaternion();
+		FTransform Result = FTransform(Rotation, Position);
+		return Result;
+	}
 }
 
 Bullet UGameStateInterface::GetBullet(const AVWGameStateBase* VWGameState, int32 Index)
@@ -94,4 +175,3 @@ int32 UGameStateInterface::PeriodicChecksum(const AVWGameStateBase* VWGameState)
 {
 	return GetNonGameState(VWGameState).periodic.checksum;
 }
-

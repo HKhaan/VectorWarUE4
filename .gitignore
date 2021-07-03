@@ -5,7 +5,7 @@ DerivedDataCache/
 Intermediate/
 Plugins/*/Intermediate/
 Saved/
-
+.idea
 # Built data for maps
 *_BuiltData.uasset
 

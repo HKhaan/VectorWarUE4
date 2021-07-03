@@ -50,7 +50,7 @@ class AVWGameStateBase : public AGameStateBase
 
     GGPOSession* ggpo = nullptr;
 
-    GameState gs = { 0 };
+    //GameState gs = { 0 };
     NonGameState ngs = { 0 };
 
 private:
@@ -85,7 +85,6 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Graph")
 	static float GraphValue(int32 Value, FVector2D GraphSize, int32 MinY, int32 MaxY);
 
-    const GameState GetGameState() const;
     const NonGameState GetNonGameState() const;
 
 private:

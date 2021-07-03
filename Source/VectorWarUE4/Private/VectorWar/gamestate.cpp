@@ -15,19 +15,6 @@
 // the session
 //extern GGPOSession *ggpo;
 
-static double
-degtorad(double deg)
-{
-   return PI * deg / 180;
-}
-
-static double
-distance(Position *lhs, Position *rhs)
-{
-   double x = rhs->x - lhs->x;
-   double y = rhs->y - lhs->y;
-   return sqrt(x*x + y*y);
-}
 
 /*
  * InitGameState --
@@ -154,6 +141,9 @@ void GameState::MoveShip(int which, double heading, double thrust, int fire)
       ship->velocity.dy *= -1;
       ship->position.y += (ship->velocity.dy * 2);
    }
+
+
+   
    for (int i = 0; i < MAX_BULLETS; i++) {
       Bullet *bullet = ship->bullets + i;
       if (bullet->active) {

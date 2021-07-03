@@ -1,3 +1,10 @@
+
+# ECS
+This is a fork on the VectorWarUE4 repo by BwdYeti (https://github.com/BwdYeti/VectorWarUE4).
+I changed the code to work with my virtualmemory/ecs(https://github.com/hakansanli/ECS_for_rollback_netcode) that's designed for working with ggpo.
+
+The parts I wrote are not the cleanest. So don't take what I wrote as an example of how you have to write cpp.
+
 ### VectorWar UE4
 
 A port of the GGPO sample game "VectorWar" for Unreal Engine 4, using [GGPOUE4](https://github.com/BwdYeti/GGPOUE4).
