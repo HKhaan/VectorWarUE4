@@ -555,10 +555,6 @@ bool AVWGameStateBase::vw_load_game_state_callback(unsigned char* buffer, int32 
 	if (VirtualMemory::memory.size() != len)
 	{
 		VirtualMemory::memory.resize(len);
-		for (auto it = VirtualMemory::pointerFixCallbacks.begin(); it != VirtualMemory::pointerFixCallbacks.end(); ++it)
-		{
-			(*it)();
-		}
 	}
 	memcpy(&VirtualMemory::memory[0], buffer, len);
 	return true;
