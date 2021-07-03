@@ -552,10 +552,6 @@ bool AVWGameStateBase::vw_save_game_state_callback(unsigned char** buffer, int32
 
 bool AVWGameStateBase::vw_load_game_state_callback(unsigned char* buffer, int32 len)
 {
-	if (VirtualMemory::memory.size() != len)
-	{
-		VirtualMemory::memory.resize(len);
-	}
 	memcpy(&VirtualMemory::memory[0], buffer, len);
 	return true;
 }
