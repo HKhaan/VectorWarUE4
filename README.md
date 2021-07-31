@@ -5,7 +5,7 @@ I changed the code to work with my virtualmemory/ecF(https://github.com/hakansan
 
 The parts I wrote are not the cleanest. So don't take what I wrote as an example of how you have to write cpp.
 
-!!Note: the reason the ecf folder is called ecs is because I didn't know the difference between the two arhitectures during development. (日本語ドキュメントはこちら)
+!!Note: the reason the ecf folder is called ecs is because I didn't know the difference between the two arhitectures during development. 
 
 ### VectorWar UE4
 
