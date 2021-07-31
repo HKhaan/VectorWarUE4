@@ -1,9 +1,11 @@
 
-# ECS
+# ECF
 This is a fork on the VectorWarUE4 repo by BwdYeti (https://github.com/BwdYeti/VectorWarUE4).
-I changed the code to work with my virtualmemory/ecs(https://github.com/hakansanli/ECS_for_rollback_netcode) that's designed for working with ggpo.
+I changed the code to work with my virtualmemory/ecF(https://github.com/hakansanli/ECS_for_rollback_netcode) that's designed for working with ggpo.
 
 The parts I wrote are not the cleanest. So don't take what I wrote as an example of how you have to write cpp.
+
+!!Note: the reason the ecf folder is called ecs is because I didn't know the difference between the two arhitectures during development. (日本語ドキュメントはこちら)
 
 ### VectorWar UE4
 
