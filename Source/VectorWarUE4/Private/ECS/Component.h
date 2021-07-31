@@ -10,7 +10,7 @@ class ComponentDataCreator
 public:
 
 	int start=start = VirtualMemory::memorySize;;
-	ObjType* data=data = VirtualMemory::NewStruct<ObjType>(); ;
+	ObjType* data= VirtualMemory::NewStruct<ObjType>(); ;
 
 	//template <typename ObjObjT>
 	static ComponentDataCreator<ObjType>* CreateDataForComponent()
